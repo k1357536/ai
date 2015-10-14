@@ -1,0 +1,17 @@
+package at.jku.cp.ai.search;
+
+import java.util.List;
+
+public interface Node {
+	<State> State getState();
+	<Action> Action getAction();
+	
+	Node parent();
+	List<Node> adjacent();
+
+	boolean isRoot();
+	boolean isLeaf();
+
+	public int hashCode();
+	public boolean equals(Object obj);
+}
