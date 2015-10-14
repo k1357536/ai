@@ -47,10 +47,7 @@ public class RS implements Search
 			List<Node> adjacent = current.adjacent();
 
 			// choose a random node to expand next
-			int choice = 1; // http://dilbert.com/strip/2001-10-25
-			
-			// TODO, assignment0: replace the above line to pass all tests ...
-			// int choice = random.nextInt(adjacent.size());
+			int choice = random.nextInt(adjacent.size());
 			current = adjacent.get(choice);
 			
 			// this is it, actually.
