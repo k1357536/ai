@@ -32,7 +32,7 @@ public class TestRandomSearch {
 	@Rule
 	public Timeout timeout = new Timeout(1000);
 	
-	@Parameters
+	@
 	public static Collection<Object[]> generateParams() {
 		List<Object[]> params = new ArrayList<Object[]>();
 		for (int i = 0; i < Constants.NUMBER_OF_LEVELS; i++) {
