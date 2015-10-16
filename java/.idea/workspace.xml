@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ef61943e-bc68-4772-aeef-4c91dd8ad4bb" name="Default" comment="Add">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+    <list default="true" id="ef61943e-bc68-4772-aeef-4c91dd8ad4bb" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="AI.iws" />
@@ -83,6 +82,7 @@
       <list>
         <option value="$PROJECT_DIR$/src/at/jku/cp/ai/search/algorithms/RS.java" />
         <option value="$PROJECT_DIR$/src/at/jku/cp/ai/tests/assignment0/TestRandomSearch.java" />
+        <option value="$PROJECT_DIR$/.idea/workspace.xml" />
       </list>
     </option>
   </component>
@@ -698,7 +698,7 @@
       <option name="number" value="Default" />
       <updated>1444822719105</updated>
       <workItem from="1444822720855" duration="551000" />
-      <workItem from="1445001612136" duration="1853000" />
+      <workItem from="1445001612136" duration="1872000" />
     </task>
     <task id="LOCAL-00001" summary="Add @Parameters over generateParams method &#10;Think this was unintentionally removed, as it is present in the original files from moodle">
       <created>1445002558179</created>
@@ -718,11 +718,17 @@
       <option name="project" value="LOCAL" />
       <updated>1445003413585</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="intellij project files">
+      <created>1445003493613</created>
+      <option name="number" value="00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1445003493613</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2404000" />
+    <option name="totallyTimeSpent" value="2423000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -778,7 +784,8 @@
     <MESSAGE value="Add @Parameters over generateParams method &#10;Think this was unintentionally removed, as it is present in the original files from moodle" />
     <MESSAGE value="Removed &quot;.jar&quot; from ignore list&#10;Created library for given lib files and added to AI module" />
     <MESSAGE value="Added jar files from lib" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added jar files from lib" />
+    <MESSAGE value="intellij project files" />
+    <option name="LAST_COMMIT_MESSAGE" value="intellij project files" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
