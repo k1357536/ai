@@ -40,7 +40,7 @@ public class TestHeuristicSearchers {
 	}
 
 	@Rule
-	public Timeout timeout = new Timeout(1000);
+	public Timeout timeout = new Timeout(10000);
 	
 	private String pathToLevel;
 
