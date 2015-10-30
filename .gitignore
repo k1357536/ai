@@ -13,3 +13,6 @@ hs_err_pid*
 # intellj project files with user specific settings (https://intellij-support.jetbrains.com/hc/en-us/articles/206827587-How-to-manage-projects-under-Version-Control-Systems)
 java/.idea/workspace.xml
 java/.idea/tasks.xml
+.metadata/
+.recommenders/
+RemoteSystemsTempFiles/
