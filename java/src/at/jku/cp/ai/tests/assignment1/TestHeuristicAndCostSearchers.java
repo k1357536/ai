@@ -40,8 +40,8 @@ public class TestHeuristicAndCostSearchers {
 		return params;
 	}
 
-	@Rule
-	public Timeout timeout = new Timeout(1000);
+	//@Rule
+	//public Timeout timeout = new Timeout(1000);
 	
 	private String pathToLevel;
 

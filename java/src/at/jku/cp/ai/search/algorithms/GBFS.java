@@ -24,27 +24,27 @@ public class GBFS implements Search {
 
 	@Override
 	public Node search(Node start, Predicate<Node> endPredicate) {
-		// 24 sec, use push instead of add
-		//StackWithFastContains<Node> visited = new StackWithFastContains<>();
-		
 		// 18 sec
-		Set<Node> visited = new HashSet<>();
-		
+		HashSet<Node> visited = new HashSet<Node>();
+
 		StablePriorityQueue<Double, Node> pq = new StablePriorityQueue<Double, Node>();
 		pq.add(new Pair<Double, Node>(heuristic.apply(start), start));
+		visited.add(start);
+		
+		Node n;
+		do {
+			n = pq.poll().s;
 
-		while (pq.size() > 0) {
-			Node n = pq.poll().s;
-
-			if (visited.contains(n))
-				continue;
 			if (endPredicate.test(n))
 				return n;
-
-			visited.add(n);
-			for (Node n1 : n.adjacent())
-				pq.add(new Pair<Double, Node>(heuristic.apply(n1), n1));
-		}
+			
+			for (Node n1 : n.adjacent()) {
+				if (!visited.contains(n1)) {
+					pq.add(new Pair<Double, Node>(heuristic.apply(n1), n1));
+					visited.add(n1);
+				}
+			}
+		} while (pq.size() > 0);
 		return null;
 	}
 }
