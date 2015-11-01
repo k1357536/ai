@@ -20,7 +20,6 @@ public class RS implements Search
 	public Node search(Node start, Predicate<Node> endPredicate)
 	{
 		// first we will need some randomness
-		@SuppressWarnings("unused")
 		Random random = new Random(42L);
 
 		// we will go in random directions for as long as is necessary
