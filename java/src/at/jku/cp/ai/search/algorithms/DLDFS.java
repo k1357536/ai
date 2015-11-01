@@ -32,15 +32,13 @@ public class DLDFS implements Search {
 			if (endPredicate.test(node)) {
 				return node;
 			}
-
-			path.push(node);
-			for(Node n : node.adjacent()) {
-				if (!path.contains(n)) {
-					path.push(n);
-					Node result = depthLimitedSearch(n, endPredicate, depth - 1);
-					if (result != null) {
-						return result;
-					}
+			if (!path.contains(node)) {
+				path.push(node);
+				for(Node n : node.adjacent()) {
+						Node result = depthLimitedSearch(n, endPredicate, depth - 1);
+						if (result != null) {
+							return result;
+						}
 				}
 			}
 		}
