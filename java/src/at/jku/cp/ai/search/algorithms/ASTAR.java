@@ -1,5 +1,6 @@
 package at.jku.cp.ai.search.algorithms;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
@@ -20,29 +21,46 @@ public class ASTAR implements Search {
 		this.cost = cost;
 	}
 
+	private class MyPair implements Comparable<MyPair> {
+		double heuristic;
+		double cost;
+
+		public MyPair(double heuristic, double cost) {
+			this.heuristic = heuristic;
+			this.cost = cost;
+		}
+
+		@Override
+		public int compareTo(MyPair other) {
+			return Double.compare(heuristic + cost, other.heuristic + other.cost);
+		}
+	}
+
 	@Override
 	public Node search(Node start, Predicate<Node> endPredicate) {
 		HashSet<Node> visited = new HashSet<Node>();
 
-		StablePriorityQueue<Double, Node> pq = new StablePriorityQueue<Double, Node>();
-		pq.add(new Pair<Double, Node>(heuristic.apply(start), start));
-		visited.add(start);
+		StablePriorityQueue<MyPair, Node> fringe = new StablePriorityQueue<>();
+		fringe.add(new Pair<MyPair, Node>(new MyPair(heuristic.apply(start), cost.apply(start)), start));
 
+		Pair<MyPair, Node> p;
 		Node n;
 		do {
-			n = pq.poll().s;
+			p = fringe.poll();
+			n = p.s;
+			if (visited.contains(n))
+				continue;
 
 			if (endPredicate.test(n))
 				return n;
 
+			visited.add(n);
+
 			for (Node n1 : n.adjacent()) {
-				double c = heuristic.apply(n1) + cost.apply(n1);
-				if (!visited.contains(n1)) {
-					pq.add(new Pair<Double, Node>(c, n1));
-					visited.add(n1);
-				}
+				MyPair pair = new MyPair(heuristic.apply(n1), p.f.cost + cost.apply(n1));
+				fringe.add(new Pair<MyPair, Node>(pair, n1));
 			}
-		} while (pq.size() > 0);
+		} while (!fringe.isEmpty());
 		return null;
 	}
 }

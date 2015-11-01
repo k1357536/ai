@@ -27,24 +27,24 @@ public class GBFS implements Search {
 		// 18 sec
 		HashSet<Node> visited = new HashSet<Node>();
 
-		StablePriorityQueue<Double, Node> pq = new StablePriorityQueue<Double, Node>();
-		pq.add(new Pair<Double, Node>(heuristic.apply(start), start));
+		StablePriorityQueue<Double, Node> fringe = new StablePriorityQueue<Double, Node>();
+		fringe.add(new Pair<Double, Node>(heuristic.apply(start), start));
 		visited.add(start);
-		
+
 		Node n;
 		do {
-			n = pq.poll().s;
+			n = fringe.poll().s;
 
 			if (endPredicate.test(n))
 				return n;
-			
+
 			for (Node n1 : n.adjacent()) {
 				if (!visited.contains(n1)) {
-					pq.add(new Pair<Double, Node>(heuristic.apply(n1), n1));
+					fringe.add(new Pair<Double, Node>(heuristic.apply(n1), n1));
 					visited.add(n1);
 				}
 			}
-		} while (pq.size() > 0);
+		} while (!fringe.isEmpty());
 		return null;
 	}
 }
