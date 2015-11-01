@@ -2,7 +2,6 @@ package at.jku.cp.ai.search.algorithms;
 
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.function.Predicate;
 
 import at.jku.cp.ai.search.Node;
@@ -15,7 +14,7 @@ public class BFS implements Search
 	@Override
 	public Node search(Node start, Predicate<Node> endPredicate)
 	{
-		List<Node> fringe = new LinkedList<>();
+		LinkedList<Node> fringe = new LinkedList<>();
 		HashSet<Node> closedList = new HashSet<>();
 		fringe.add(start);
 
