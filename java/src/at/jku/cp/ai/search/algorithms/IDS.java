@@ -8,7 +8,6 @@ import at.jku.cp.ai.search.Search;
 // Iterative Deepening Search
 public class IDS implements Search
 {
-	@SuppressWarnings("unused")
 	private int limit;
 
 	public IDS(int limit)

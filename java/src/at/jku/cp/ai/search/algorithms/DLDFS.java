@@ -24,24 +24,26 @@ public class DLDFS implements Search {
 	@Override
 	public Node search(Node start, Predicate<Node> endPredicate) {
 		path = new StackWithFastContains<>();
-		return depthLimitedSearch(start, endPredicate, limit);
+		return dls(start, endPredicate, limit);
 	}
 
-	private Node depthLimitedSearch(Node node, Predicate<Node> endPredicate, int depth) {
+	private Node dls(Node node, Predicate<Node> endPredicate, int depth) {
+		path.push(node);
 		if (depth >= 0) {
 			if (endPredicate.test(node)) {
 				return node;
 			}
-			if (!path.contains(node)) {
-				path.push(node);
-				for(Node n : node.adjacent()) {
-						Node result = depthLimitedSearch(n, endPredicate, depth - 1);
-						if (result != null) {
-							return result;
-						}
+
+			for (Node n : node.adjacent()) {
+				if (!path.contains(n)) {
+					Node result = dls(n, endPredicate, depth - 1);
+					if (result != null) {
+						return result;
+					}
 				}
 			}
 		}
+		path.pop();
 		return null;
 	}
 }
