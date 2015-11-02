@@ -1,7 +1,5 @@
 package at.jku.cp.ai.search.algorithms;
 
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.function.Predicate;
 
 import at.jku.cp.ai.search.Node;
@@ -23,7 +21,9 @@ public class DLDFS implements Search {
 
 	@Override
 	public Node search(Node start, Predicate<Node> endPredicate) {
+		// create empty path
 		path = new StackWithFastContains<>();
+		// start recursive call with max depth
 		return dls(start, endPredicate, limit);
 	}
 
@@ -36,6 +36,8 @@ public class DLDFS implements Search {
 
 			for (Node n : node.adjacent()) {
 				if (!path.contains(n)) {
+					// recursively call dls for adjacent nodes (= LIFO)
+					// with a lower depth value
 					Node result = dls(n, endPredicate, depth - 1);
 					if (result != null) {
 						return result;
@@ -43,6 +45,7 @@ public class DLDFS implements Search {
 				}
 			}
 		}
+		// limit is reached -> remove node form path
 		path.pop();
 		return null;
 	}

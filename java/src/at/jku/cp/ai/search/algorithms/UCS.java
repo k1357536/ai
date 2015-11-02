@@ -21,14 +21,18 @@ public class UCS implements Search
 	@Override
 	public Node search(Node start, Predicate<Node> endPredicate)
 	{
+		// priority queue for fringe -> nodes must be expanded by there priority order
 		StablePriorityQueue<Double, Node> fringe = new StablePriorityQueue<>();
+		// HashSet for closed list, for O(1) insert and contains (see theory part)
 		HashSet<Node> closedList = new HashSet<>();
+
 		fringe.add(new Pair<>(cost.apply(start), start));
 
+		Pair<Double, Node> curPair;
 		Node current;
 		Double pathCosts;
-		Pair<Double, Node> curPair;
 		while(!fringe.isEmpty()) {
+			// get node from fringe with lowest cost
 			curPair = fringe.poll();
 			current = curPair.s;
 			pathCosts = curPair.f;
@@ -37,9 +41,11 @@ public class UCS implements Search
 				return current;
 			}
 
+			// only expand node if not already visited (= in closed list)
 			if (!closedList.contains(current)) {
 				closedList.add(current);
 				for (Node n : current.adjacent()) {
+					// calculate cost for node: costs from root to current node + cost to next node
 					fringe.add(new Pair<>(pathCosts + cost.apply(n), n));
 				}
 			}

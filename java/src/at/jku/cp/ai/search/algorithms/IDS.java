@@ -18,6 +18,8 @@ public class IDS implements Search
 	@Override
 	public Node search(Node start, Predicate<Node> endPredicate) {
 		DLDFS searcher;
+		// Call DFS search iteratively with increased limit,
+		// until goal is reached
 		for(int i = 0; i <= limit; i++) {
 			searcher = new DLDFS(i);
 			Node result =  searcher.search(start, endPredicate);
