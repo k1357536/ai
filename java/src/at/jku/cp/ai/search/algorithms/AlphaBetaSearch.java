@@ -20,7 +20,8 @@ public class AlphaBetaSearch implements AdversarialSearch {
 
 	/**
 	 * To limit the extent of the search, this implementation should honor a
-	 * limiting predicate
+	 * limiting predicate. The predicate returns 'true' as long as we are below the limit,
+	 * and 'false', if we exceed the limit.
 	 * 
 	 * @param searchLimitingPredicate
 	 */
@@ -30,6 +31,7 @@ public class AlphaBetaSearch implements AdversarialSearch {
 	}
 
 	public Pair<Node, Double> search(Node start, Function<Node, Double> evalFunction) {
+		// TODO: implement alpha-beta pruning here
 		return new Pair<Node, Double>(start, 0d);
 	}
 }
