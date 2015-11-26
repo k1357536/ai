@@ -1,8 +1,6 @@
 package at.jku.cp.ai.search.algorithms;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 

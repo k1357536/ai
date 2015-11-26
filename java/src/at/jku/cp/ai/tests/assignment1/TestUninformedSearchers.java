@@ -7,9 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.Timeout;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
@@ -22,11 +20,11 @@ import at.jku.cp.ai.rau.nodes.IBoardNode;
 import at.jku.cp.ai.rau.objects.Fountain;
 import at.jku.cp.ai.rau.objects.Move;
 import at.jku.cp.ai.rau.objects.V;
+import at.jku.cp.ai.search.Node;
+import at.jku.cp.ai.search.Search;
 import at.jku.cp.ai.search.algorithms.BFS;
 import at.jku.cp.ai.search.algorithms.DLDFS;
 import at.jku.cp.ai.search.algorithms.IDS;
-import at.jku.cp.ai.search.Node;
-import at.jku.cp.ai.search.Search;
 import at.jku.cp.ai.utils.Constants;
 import at.jku.cp.ai.utils.PathUtils;
 import at.jku.cp.ai.utils.TestUtils;
@@ -44,8 +42,7 @@ public class TestUninformedSearchers {
 		return params;
 	}
 
-	@Rule
-	public Timeout timeout = new Timeout(40000);
+	public static final int to = 40000;
 
 	private String pathToLevel;
 
@@ -53,13 +50,13 @@ public class TestUninformedSearchers {
 		pathToLevel = String.format(Constants.ASSET_PATH + "/assignment1/L%d", i);
 	}
 
-	@Test
+	@Test(timeout = to)
 	public void testBFS() throws Exception {
 		testSearcherForLevel(Board.fromLevelFile(pathToLevel + "/level"), PathUtils.fromFile(pathToLevel + "/bfs.path"),
 				IBoardNode.class, new BFS());
 	}
 
-	@Test
+	@Test(timeout = to)
 	public void testIDS() throws Exception {
 		List<V> pathToGoal = PathUtils.fromFile(pathToLevel + "/bfs.path");
 		testSearcherForLevel(Board.fromLevelFile(pathToLevel + "/level"), pathToGoal, AlwaysMoveNode.class,
@@ -67,7 +64,7 @@ public class TestUninformedSearchers {
 
 	}
 
-	@Test
+	@Test(timeout = to)
 	public void testDFS() throws Exception {
 		testSearcherForLevel(Board.fromLevelFile(pathToLevel + "/level"), PathUtils.fromFile(pathToLevel + "/dfs.path"),
 				AlwaysMoveNode.class, new DLDFS(40));

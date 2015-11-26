@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.Timeout;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
@@ -39,44 +37,32 @@ public class TestHeuristicSearchers {
 		return params;
 	}
 
-	@Rule
-	public Timeout timeout = new Timeout(3000);
-	
+	public static final int to = 40000;
+
 	private String pathToLevel;
 
 	public TestHeuristicSearchers(Integer i) {
 		pathToLevel = String.format(Constants.ASSET_PATH + "/assignment1/L%d", i);
 	}
 
-	@Test
+	@Test(timeout = to)
 	public void testGBFSforEuclideanDistance() throws Exception {
-		testSearcherForLevel(
-				Board.fromLevelFile(pathToLevel + "/level"),
-				IBoardNode.class,
-				GBFS.class,
-				new DistanceHeuristic(
-						board -> board.getCurrentUnicorn().pos,
-						board -> board.getFountains().get(0).pos,
-						(a, b) -> V.euclidean(a, b)
-				),
+		testSearcherForLevel(Board.fromLevelFile(pathToLevel + "/level"), IBoardNode.class,
+				GBFS.class, new DistanceHeuristic(board -> board.getCurrentUnicorn().pos,
+						board -> board.getFountains().get(0).pos, (a, b) -> V.euclidean(a, b)),
 				PathUtils.fromFile(pathToLevel + "/gbfs_ec.path"));
 	}
-	
-	@Test
+
+	@Test(timeout = to)
 	public void testGBFSforManhattanDistance() throws Exception {
-		testSearcherForLevel(
-				Board.fromLevelFile(pathToLevel + "/level"),
-				IBoardNode.class,
-				GBFS.class,
-				new DistanceHeuristic(
-						board -> board.getCurrentUnicorn().pos,
-						board -> board.getFountains().get(0).pos,
-						(a, b) -> (double) V.manhattan(a, b)
-				),
+		testSearcherForLevel(Board.fromLevelFile(pathToLevel + "/level"), IBoardNode.class,
+				GBFS.class, new DistanceHeuristic(board -> board.getCurrentUnicorn().pos,
+						board -> board.getFountains().get(0).pos, (a, b) -> (double) V.manhattan(a, b)),
 				PathUtils.fromFile(pathToLevel + "/gbfs_mh.path"));
 	}
 
-	private void testSearcherForLevel(IBoard board, Class<?> nodeClazz, Class<?> searcherClazz, Function<Node, Double> heuristic, List<V> expectedPath) throws Exception {
+	private void testSearcherForLevel(IBoard board, Class<?> nodeClazz, Class<?> searcherClazz,
+			Function<Node, Double> heuristic, List<V> expectedPath) throws Exception {
 		IBoard startBoard = board.copy();
 		final Fountain end = board.getFountains().get(0);
 
@@ -93,7 +79,7 @@ public class TestHeuristicSearchers {
 		List<Node> path = PathUtils.getPath(endNode);
 		List<IBoard> actualBoardStates = PathUtils.getStates(path);
 		List<Move> actualMoveSequence = PathUtils.getActions(path);
-		
+
 		TestUtils.assertListEquals(expectedBoardStates, actualBoardStates);
 		TestUtils.assertListEquals(expectedMoveSequence, actualMoveSequence);
 	}

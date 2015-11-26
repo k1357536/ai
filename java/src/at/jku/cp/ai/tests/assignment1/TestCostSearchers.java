@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.Timeout;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
@@ -39,26 +37,22 @@ public class TestCostSearchers {
 		return params;
 	}
 
-	@Rule
-	public Timeout timeout = new Timeout(40000);
-	
+	public static final int to = 40000;
+
 	private String pathToLevel;
 
 	public TestCostSearchers(Integer i) {
 		pathToLevel = String.format(Constants.ASSET_PATH + "/assignment1/L%d", i);
 	}
 
-	@Test
+	@Test(timeout = to)
 	public void testUCSforEuclideanDistance() throws Exception {
-		testSearcherForLevel(
-				Board.fromLevelFile(pathToLevel + "/level"),
-				IBoardNode.class,
-				UCS.class,
-				LevelCost.fromFile(pathToLevel + "/costs"),
-				PathUtils.fromFile(pathToLevel + "/ucs.path"));
+		testSearcherForLevel(Board.fromLevelFile(pathToLevel + "/level"), IBoardNode.class, UCS.class,
+				LevelCost.fromFile(pathToLevel + "/costs"), PathUtils.fromFile(pathToLevel + "/ucs.path"));
 	}
 
-	private void testSearcherForLevel(IBoard board, Class<?> nodeClazz, Class<?> searcherClazz, Function<Node, Double> cost, List<V> expectedPath) throws Exception {
+	private void testSearcherForLevel(IBoard board, Class<?> nodeClazz, Class<?> searcherClazz,
+			Function<Node, Double> cost, List<V> expectedPath) throws Exception {
 		IBoard startBoard = board.copy();
 		final Fountain end = board.getFountains().get(0);
 
@@ -75,7 +69,7 @@ public class TestCostSearchers {
 		List<Node> path = PathUtils.getPath(endNode);
 		List<IBoard> actualBoardStates = PathUtils.getStates(path);
 		TestUtils.assertListEquals(expectedBoardStates, actualBoardStates);
-		
+
 		List<Move> actualMoveSequence = PathUtils.getActions(path);
 		TestUtils.assertListEquals(expectedMoveSequence, actualMoveSequence);
 	}

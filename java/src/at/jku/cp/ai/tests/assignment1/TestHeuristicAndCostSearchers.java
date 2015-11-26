@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.Timeout;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
@@ -40,9 +38,9 @@ public class TestHeuristicAndCostSearchers {
 		return params;
 	}
 
-	//@Rule
-	//public Timeout timeout = new Timeout(1000);
-	
+	// @Rule
+	// public Timeout timeout = new Timeout(1000);
+
 	private String pathToLevel;
 
 	public TestHeuristicAndCostSearchers(Integer i) {
@@ -51,41 +49,22 @@ public class TestHeuristicAndCostSearchers {
 
 	@Test
 	public void testASTARforEuclideanDistance() throws Exception {
-		testSearcherForLevel(
-				Board.fromLevelFile(pathToLevel + "/level"),
-				AlwaysMoveNode.class,
-				ASTAR.class,
-				new DistanceHeuristic(
-						board -> board.getCurrentUnicorn().pos,
-						board -> board.getFountains().get(0).pos,
-						(a, b) -> V.euclidean(a, b)
-				),
-				LevelCost.fromFile(pathToLevel + "/costs"),
-				PathUtils.fromFile(pathToLevel + "/astar_ec.path"));
+		testSearcherForLevel(Board.fromLevelFile(pathToLevel + "/level"), AlwaysMoveNode.class, ASTAR.class,
+				new DistanceHeuristic(board -> board.getCurrentUnicorn().pos, board -> board.getFountains().get(0).pos,
+						(a, b) -> V.euclidean(a, b)),
+				LevelCost.fromFile(pathToLevel + "/costs"), PathUtils.fromFile(pathToLevel + "/astar_ec.path"));
 	}
 
 	@Test
 	public void testASTARforManhattanDistance() throws Exception {
-		testSearcherForLevel(
-				Board.fromLevelFile(pathToLevel + "/level"),
-				AlwaysMoveNode.class,
-				ASTAR.class,
-				new DistanceHeuristic(
-						board -> board.getCurrentUnicorn().pos,
-						board -> board.getFountains().get(0).pos,
-						(a, b) -> (double) V.manhattan(a, b)
-				),
-				LevelCost.fromFile(pathToLevel + "/costs"),
-				PathUtils.fromFile(pathToLevel + "/astar_mh.path"));
+		testSearcherForLevel(Board.fromLevelFile(pathToLevel + "/level"), AlwaysMoveNode.class, ASTAR.class,
+				new DistanceHeuristic(board -> board.getCurrentUnicorn().pos, board -> board.getFountains().get(0).pos,
+						(a, b) -> (double) V.manhattan(a, b)),
+				LevelCost.fromFile(pathToLevel + "/costs"), PathUtils.fromFile(pathToLevel + "/astar_mh.path"));
 	}
 
-	private void testSearcherForLevel(
-			IBoard board,
-			Class<?> nodeClazz,
-			Class<?> searcherClazz,
-			Function<Node, Double> heuristic,
-			Function<Node, Double> cost,
-			List<V> expectedPath) throws Exception {
+	private void testSearcherForLevel(IBoard board, Class<?> nodeClazz, Class<?> searcherClazz,
+			Function<Node, Double> heuristic, Function<Node, Double> cost, List<V> expectedPath) throws Exception {
 
 		IBoard startBoard = board.copy();
 		final Fountain end = board.getFountains().get(0);
@@ -96,7 +75,8 @@ public class TestHeuristicAndCostSearchers {
 		List<Move> expectedMoveSequence = PathUtils.vsToMoves(expectedPath);
 		List<IBoard> expectedBoardStates = PathUtils.movesToIBoards(expectedMoveSequence, board.copy());
 
-		Search searcher = (Search) searcherClazz.getDeclaredConstructor(Function.class, Function.class).newInstance(heuristic, cost);
+		Search searcher = (Search) searcherClazz.getDeclaredConstructor(Function.class, Function.class)
+				.newInstance(heuristic, cost);
 		Node startNode = (Node) nodeClazz.getDeclaredConstructor(IBoard.class).newInstance(startBoard);
 		Node endNode = searcher.search(startNode, endReached);
 
@@ -104,8 +84,7 @@ public class TestHeuristicAndCostSearchers {
 		List<IBoard> actualBoardStates = PathUtils.getStates(path);
 		List<Move> actualMoveSequence = PathUtils.getActions(path);
 
-		if (!TestUtils.listEquals(expectedBoardStates, actualBoardStates))
-		{
+		if (!TestUtils.listEquals(expectedBoardStates, actualBoardStates)) {
 			System.out.println("expected : " + expectedMoveSequence);
 			System.out.println("actual   : " + actualMoveSequence);
 
@@ -117,7 +96,7 @@ public class TestHeuristicAndCostSearchers {
 
 			PathUtils.comparePathCost(board.copy(), expectedMoveSequence, actualMoveSequence, heuristic, cost);
 		}
-		
+
 		TestUtils.assertListEquals(expectedMoveSequence, actualMoveSequence);
 		TestUtils.assertListEquals(expectedBoardStates, actualBoardStates);
 	}

@@ -1,18 +1,13 @@
 package at.jku.cp.ai.search.algorithms;
 
-import java.util.Comparator;
 import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collector;
 
 import at.jku.cp.ai.search.Node;
 import at.jku.cp.ai.search.Search;
 import at.jku.cp.ai.search.datastructures.Pair;
 import at.jku.cp.ai.search.datastructures.StablePriorityQueue;
-import at.jku.cp.ai.search.datastructures.StackWithFastContains;
 
 // Greedy Best-First Search
 public class GBFS implements Search {
