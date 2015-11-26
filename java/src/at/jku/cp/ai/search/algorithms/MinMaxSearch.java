@@ -29,9 +29,14 @@ public class MinMaxSearch implements AdversarialSearch {
 		double best = Double.NEGATIVE_INFINITY;
 		Node result = start;
 		for (Node n : start.adjacent()) {
-			double value = minValue(n, 0);
-			if (value > best) {
-				best = value;
+			double v;
+			if (searchLimitingPredicate.test(0, n))
+				v = minValue(n, 0);
+			else
+				v = boardEvaluationFunction.apply(n);
+
+			if (v > best) {
+				best = v;
 				result = n;
 			}
 		}
@@ -39,30 +44,28 @@ public class MinMaxSearch implements AdversarialSearch {
 	}
 
 	private double maxValue(Node current, int level) {
-		double best = boardEvaluationFunction.apply(current);
-		if (searchLimitingPredicate.test(level, current)) {
-			double bestC = Double.NEGATIVE_INFINITY;
-			for (Node n : current.adjacent()) {
-				double value = minValue(n, level + 1);
-				if (value > bestC) {
-					best = bestC = value;
-				}
-			}
+		double v = Double.NEGATIVE_INFINITY;
+		for (Node n : current.adjacent()) {
+			if (searchLimitingPredicate.test(level + 1, n))
+				v = Math.max(v, minValue(n, level + 1));
+			else
+				v = Math.max(v, boardEvaluationFunction.apply(n));
 		}
-		return best;
+		if (v == Double.NEGATIVE_INFINITY)
+			return boardEvaluationFunction.apply(current);
+		return v;
 	}
 
 	private double minValue(Node current, int level) {
-		double best = boardEvaluationFunction.apply(current);
-		if (searchLimitingPredicate.test(level, current)) {
-			double bestC = Double.POSITIVE_INFINITY;
-			for (Node n : current.adjacent()) {
-				double value = maxValue(n, level + 1);
-				if (value < bestC) {
-					best = bestC = value;
-				}
-			}
+		double v = Double.POSITIVE_INFINITY;
+		for (Node n : current.adjacent()) {
+			if (searchLimitingPredicate.test(level + 1, n))
+				v = Math.min(v, maxValue(n, level + 1));
+			else
+				v = Math.min(v, boardEvaluationFunction.apply(n));
 		}
-		return best;
+		if (v == Double.POSITIVE_INFINITY)
+			return boardEvaluationFunction.apply(current);
+		return v;
 	}
 }
