@@ -23,10 +23,6 @@ public class QLearner
 	private boolean verbose;
 
 	private boolean bonus;
-	/** Contains position of the cloud */
-	private V cPos = null;
-	/** Contains position of spawned seed */
-	private V sPos = null;
 
 	/** reward for a good move */
 	private static double REWARD_GOOD_MOVE = 100d;
@@ -65,13 +61,9 @@ public class QLearner
 	 * @param board
 	 */
 	public void learnQFunction(IBoard board) {
-		// get position of cloud, there is only only cloud per board
-		cPos = board.getClouds().get(0).pos;
 		for (int e = 0; e < numEpisodes; e++) {
 			// start each episode with a fresh board
 			IBoard learnBoard = board.copy();
-			// reset seed position
-			sPos = null;
 			// learn as long as goal not reached and the unicorn is still on the board
 			while (!goalReached(learnBoard) && !wentSailing(learnBoard)) {
 				Move next = chooseMove(learnBoard);
@@ -103,43 +95,23 @@ public class QLearner
 	 * @param move
 	 */
 	private void updateQMatrix(IBoard prevBoard, IBoard newBoard, Move move) {
-		double reward = getReward(prevBoard, move);
+		double reward = getReward(prevBoard, newBoard, move);
 		qmatrix.put(new Pair<>(prevBoard, move), reward + discountFactor * getMaxScore(newBoard));
 	}
 
 	/**
 	 * Returns reward for given state and action
-	 * @param board
+	 * @param prevBoard
+	 * @param newBoard
 	 * @param move
 	 * @return
 	 */
-	private double getReward(IBoard board, Move move) {
-		if (move == Move.SPAWN && nextToCloud(board)) {
-			// spawned seed next to cloud is a good thing -> good move
-			sPos = board.getUnicorns().get(0).pos;
+	private double getReward(IBoard prevBoard, IBoard newBoard, Move move) {
+		if (newBoard.getClouds().size() == 0 && newBoard.getUnicorns().size() == 1) {
+			// cloud evaporated and still alive -> good move
 			return REWARD_GOOD_MOVE;
-		} else if (sPos != null) {
-			V uPos = board.getUnicorns().get(0).pos;
-			// seed is spawned, if unicorn is save from rainbow it is a good move
-			if ((sPos.x != uPos.x && sPos.y != uPos.y) ||	/* not in the same row/column -> save */
-					Math.abs(sPos.x - uPos.x) > 3 ||
-					Math.abs(sPos.y - uPos.y) > 3) { /* at least 3 tiles away from seed -> save */
-				// went away from seed -> good move
-				return REWARD_GOOD_MOVE;
-			}
 		}
 		return REWARD_NORMAL_MOVE;
-	}
-
-	/**
-	 * Checks if unicorn is next to cloud
-	 * @param board
-	 * @return
-	 */
-	private boolean nextToCloud(IBoard board) {
-		V uPos = board.getUnicorns().get(0).pos;
-		return (cPos.x == uPos.x && (cPos.y - 1 == uPos.y || cPos.y + 1 == uPos.y)) ||
-				(cPos.y == uPos.y && (cPos.x - 1 == uPos.x || cPos.x + 1 == uPos.x));
 	}
 
 	/**
